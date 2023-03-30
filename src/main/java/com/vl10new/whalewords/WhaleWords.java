@@ -23,7 +23,7 @@ import static com.vl10new.whalewords.WordsAnalysis.*;
 )
 public class WhaleWords extends HttpServlet {
 
-    final String uploadDir = "E:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
+    final String uploadDir = "D:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
 
     public String fileUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -54,9 +54,11 @@ public class WhaleWords extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         String filePath = "";
+        int limitNo = 0;
         try
         {
             filePath = fileUpload(request, response);
+            limitNo = Integer.parseInt(request.getParameter("limitNo"));
         }
         catch(ServletException e)
         {
@@ -70,18 +72,18 @@ public class WhaleWords extends HttpServlet {
 
         ArrayList<String> stopWords = readFileFromResources("ita-stopWords.txt");
         SortedSet<Map.Entry<String, Long>> output = occurences(filePath, stopWords);
-        output = limitTo(output, 100, ORDER.ASC);
+        output = limitTo(output, limitNo, ORDER.ASC);
 
 
         //generate the image whale
         ImageGen img = new ImageGen(output, new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
-        img.imageFromMask("/whale-mask.png", new Dimension(600,600));
+        img.imageFromMask(getClass().getResource("whale-mask.png").getPath(), new Dimension(680,680));
         String image = img.imageToB64();
 
         //print page
         String body = "";
         body += "<img src='data:image/png;base64,"+image+"' alt='cloud words image'>";
-        body+= "<p>"+output+"</p>";
+        body+= "<p>"+StoString(output)+"</p>";
 
         genPage(body, response);
     }
@@ -97,9 +99,13 @@ public class WhaleWords extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html>" +
                 "<head>" +
+                "<title>Whale Words</title>\n" +
+                "    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">\n" +
+                "    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
+                "    <script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
+                "    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
                 "</head>" +
                 "<body>");
-
 
         //define pages header here
         out.println("<header></header>");
@@ -111,7 +117,7 @@ public class WhaleWords extends HttpServlet {
 
         //define pages footer here
         out.println("<footer>" +
-                "<a href='./index.jsp'>home</a><h2>Mitiche Produzioni SRL&#169;</h2><p>Produciamo cose mitiche<p>" +
+                "<a  class='btn btn-primary' href='./index.jsp'>home</a><h2>Mitiche Produzioni SRL&#169;</h2><p>Produciamo cose mitiche<p>" +
                 "</footer>");
         out.println("</body></html>");
     }

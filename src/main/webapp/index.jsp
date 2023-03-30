@@ -18,13 +18,18 @@
                 <div class="tab">
                     <h6>Upload the file to analyze</h6>
                     <p>
-                        <input type="file" name="uploadedFile" class="form-control-file" id="exampleFormControlFile1" required>
+                        <input type="file" name="uploadedFile" value="Explore" class="form-control-file" id="exampleFormControlFile1" required>
                     </p>
                 </div>
-
+                <div class="tab">
+                    <label>Limit to x words: </label>
+                    <p>
+                        <input type="number" min="1"  name="limitNo" value="10" class="form-control-file" required>
+                    </p>
+                </div>
                 <div style="overflow:auto;" id="">
                     <div style="float:right;">
-                        <button type="submit" name="send" id="nextBtn">Send</button>
+                        <button type="submit" name="send" id="nextBtn" class="btn btn-primary">Send</button>
                     </div>
                 </div>
             </form>

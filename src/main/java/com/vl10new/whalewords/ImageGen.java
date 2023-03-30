@@ -8,14 +8,13 @@ import com.kennycason.kumo.palette.ColorPalette;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
+import java.util.*;
+
 import com.kennycason.kumo.*;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.util.List;
 
 public class ImageGen
 {
@@ -42,11 +41,23 @@ public class ImageGen
 	private BufferedImage outputImage;
 	public ImageGen(SortedSet<Map.Entry<String, Long>> wordsList, ColorPalette palette)
 	{
-		final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
-		this.wordsList = frequencyAnalyzer.load();
+		this.wordsList = setToFr(wordsList);
 		this.palette = palette;
 
 		//new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF))
+	}
+
+	private List<WordFrequency> setToFr(SortedSet<Map.Entry<String, Long>> wordsList)
+	{
+		/**
+		convert sortedset to frequency analyzer
+		 */
+		List<WordFrequency> output = new ArrayList<>();
+		for(Map.Entry<String, Long> word : wordsList)
+		{
+			output.add(new WordFrequency(word.getKey(), word.getValue().intValue()));
+		}
+		return output;
 	}
 
 	public void imageFromMask(String imagePath, Dimension dim)
@@ -81,7 +92,13 @@ public class ImageGen
 
 
 		wordCloud.setColorPalette(this.palette);
-		wordCloud.setFontScalar(new SqrtFontScalar(10, 40));
+		double conversionFactor = Math.sqrt(dim.height*dim.width); //get a middle factor to calc the font size
+		double denomFactor = wordsList.size()/100.0;
+		int maxFontSize = Math.min((int)Math.round(conversionFactor/(10.0*denomFactor)),100);
+		int minFontSize = Math.max((int)Math.round(conversionFactor/(70.0*denomFactor)),(int)(maxFontSize/10));
+
+
+		wordCloud.setFontScalar(new SqrtFontScalar(minFontSize, maxFontSize));
 
 		wordCloud.build(this.wordsList);
 

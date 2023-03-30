@@ -96,6 +96,11 @@ public class WordsAnalysis {
         );
         //set the direction through iterate the list
         Iterator<Map.Entry<String, Long>> it = oreder == ORDER.DESC ? list.iterator() : new TreeSet<>(list).descendingIterator();
+
+        //prevent number bigger than list len
+        limit = limit > list.size() ? list.size() : limit;
+
+        //iterate list
         for (int i = 0; i < limit; i++) {
             if(!it.hasNext())
                 return output;
