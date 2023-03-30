@@ -25,7 +25,6 @@ public class WhaleWords extends HttpServlet {
 
     final String uploadDir = "E:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
 
-
     public String fileUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Part filePart = request.getPart("uploadedFile");
@@ -73,23 +72,48 @@ public class WhaleWords extends HttpServlet {
         SortedSet<Map.Entry<String, Long>> output = occurences(filePath, stopWords);
         output = limitTo(output, 100, ORDER.ASC);
 
-        PrintWriter out = response.getWriter();
-
-        out.println("<html><body>");
-        out.println("<p>" + StoString(output) + "</p>");
 
         //generate the image whale
         ImageGen img = new ImageGen(output, new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
         img.imageFromMask("/whale-mask.png", new Dimension(600,600));
         String image = img.imageToB64();
-        out.println("<img src='data:image/png;base64,"+image+"' alt='cloud words image'>");
 
-        out.println("<a href='./index.jsp'>home</a><h2>Mitiche Produzioni SRL&#169;</h2><p>Produciamo cose mitiche<p></body></html>");
+        //print page
+        String body = "";
+        body += "<img src='data:image/png;base64,"+image+"' alt='cloud words image'>";
+        body+= "<p>"+output+"</p>";
+
+        genPage(body, response);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         response.sendRedirect(request.getContextPath() + "/index.jsp");
+    }
+
+    public void genPage(String body, HttpServletResponse response) throws IOException
+    {
+        //standardize the pages
+        PrintWriter out = response.getWriter();
+        out.println("<html>" +
+                "<head>" +
+                "</head>" +
+                "<body>");
+
+
+        //define pages header here
+        out.println("<header></header>");
+
+
+        //print body page here
+        out.println(body);
+
+
+        //define pages footer here
+        out.println("<footer>" +
+                "<a href='./index.jsp'>home</a><h2>Mitiche Produzioni SRL&#169;</h2><p>Produciamo cose mitiche<p>" +
+                "</footer>");
+        out.println("</body></html>");
     }
 
     public void destroy() {
