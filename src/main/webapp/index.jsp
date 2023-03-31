@@ -12,24 +12,35 @@
 <div class="container mt-5">
     <div class="row d-flex justify-content-center align-items-center">
         <div class="col-md-8">
+            <h1 id="register">NLP File Analysis</h1>
             <form id="regForm" action="/Gradle___com_vl10new___WhaleWords_1_0_SNAPSHOT_war/wwords" method="post" enctype="multipart/form-data">
-                <h1 id="register">NLP File Analysis</h1>
-
-                <div class="tab">
-                    <h6>Upload the file to analyze</h6>
-                    <p>
-                        <input type="file" name="uploadedFile" value="Explore" class="form-control-file" id="exampleFormControlFile1" required>
-                    </p>
+                <div class="form-row">
+                    <div class="form-group col-sm-10">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Upload the file to analyze</span>
+                            </div>
+                            <input type="file" name="uploadedFile" value="Explore" class="form-control" id="exampleFormControlFile1" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="tab">
-                    <label>Limit to x words: </label>
-                    <p>
-                        <input type="number" min="1"  name="limitNo" value="10" class="form-control-file" required>
-                    </p>
+                <div class="form-row">
+                    <div class="form-group col-sm-10">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Limit to x words</span>
+                            </div>
+                            <input type="number" min="1"  name="limitNo" value="10" class="form-control" required>
+                        </div>
+                    </div>
                 </div>
-                <div style="overflow:auto;" id="">
-                    <div style="float:right;">
-                        <button type="submit" name="send" id="nextBtn" class="btn btn-primary">Send</button>
+                <div class="form-row">
+                    <div class="form-group col-sm-10">
+                        <div style="overflow:auto;" id="">
+                            <div style="float:left;">
+                                <button type="submit" name="send" id="nextBtn" class="btn btn-primary">Send</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

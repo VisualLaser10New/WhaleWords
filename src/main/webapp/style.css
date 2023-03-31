@@ -118,3 +118,19 @@ button:focus{
 .thanks-message {
     display: none
 }
+
+
+/*for 3d rotation*/
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.box {
+    border: 2px solid red;
+    height: 400px;
+    width: 400px;
+    position: absolute;
+}

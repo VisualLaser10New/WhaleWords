@@ -90,20 +90,24 @@ public class ImageGen
 			return;
 		}
 
-
+		//set palette color
 		wordCloud.setColorPalette(this.palette);
-		double conversionFactor = Math.sqrt(dim.height*dim.width); //get a middle factor to calc the font size
-		double denomFactor = wordsList.size()/100.0;
-		int maxFontSize = Math.min((int)Math.round(conversionFactor/(10.0*denomFactor)),100);
-		int minFontSize = Math.max((int)Math.round(conversionFactor/(70.0*denomFactor)),(int)(maxFontSize/10));
 
+		double conversionFactor = Math.sqrt(dim.height*dim.width); //get a middle factor based on image size to calc the font size
+		//double denomFactor = wordsList.size()/100.0;
+		//int maxFontSize = Math.min((int)Math.round(conversionFactor/(10.0*denomFactor)),100);
+		//int minFontSize = (int)Math.round(conversionFactor/(80.0*denomFactor));
+
+		//to generate these 2 equation I analyzed the curve generated with a bruteforce approach to gen the minfont and the max one
+		int len = wordsList.size();
+		int maxFontSize = Math.max((int)Math.round((((-30*len)-1420)/(-len-12))* (conversionFactor/680)),1);
+		int minFontSize = Math.max((int)Math.round(maxFontSize/(0.05*len+3.5)), 1); //max func -> to prevent value is 0
 
 		wordCloud.setFontScalar(new SqrtFontScalar(minFontSize, maxFontSize));
 
 		wordCloud.build(this.wordsList);
 
 		this.outputImage = wordCloud.getBufferedImage();
-
 	}
 
 	public void saveToFile(String filename, String format)
