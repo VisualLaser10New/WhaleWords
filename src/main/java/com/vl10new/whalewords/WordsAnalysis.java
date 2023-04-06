@@ -115,7 +115,7 @@ public class WordsAnalysis {
         StringBuilder output = new StringBuilder();
         for(Map.Entry<String, Long> a : values)
         {
-            output.append("'").append(a.getKey()).append("' = ").append(a.getValue()).append("<br>");
+            output.append("<li>'").append(a.getKey()).append("' = ").append(a.getValue()).append("</li>");
         }
         return output.toString();
     }

@@ -81,7 +81,7 @@ public class ImageGen
 		try
 		{
 			if (imagePath.isBlank() || !(new File(imagePath).exists()))
-				wordCloud.setBackground(new CircleBackground(300));
+				wordCloud.setBackground(new CircleBackground(340));
 			else
 				wordCloud.setBackground(new PixelBoundryBackground(imagePath));
 		}
@@ -100,7 +100,7 @@ public class ImageGen
 
 		//to generate these 2 equation I analyzed the curve generated with a bruteforce approach to gen the minfont and the max one
 		int len = wordsList.size();
-		int maxFontSize = Math.max((int)Math.round((((-30*len)-1420)/(-len-12))* (conversionFactor/680)),1);
+		int maxFontSize = Math.max((int)Math.round((((-30*len)-1420)/(-len-12))*(conversionFactor/680)),1);
 		int minFontSize = Math.max((int)Math.round(maxFontSize/(0.05*len+3.5)), 1); //max func -> to prevent value is 0
 
 		wordCloud.setFontScalar(new SqrtFontScalar(minFontSize, maxFontSize));

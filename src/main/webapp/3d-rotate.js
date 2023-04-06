@@ -1,5 +1,6 @@
-let constrain = 20;
-let mouseOverContainer = document.getElementById("ex1");
+let constrain = 100;
+
+let mouseOverContainer = document.body;//document.getElementById("ex1");
 let ex1Layer = document.getElementById("ex1-layer");
 
 function transforms(x, y, el) {
@@ -7,7 +8,7 @@ function transforms(x, y, el) {
     let calcX = -(y - box.y - (box.height / 2)) / constrain;
     let calcY = (x - box.x - (box.width / 2)) / constrain;
 
-    return "perspective(100px) "
+    return "perspective(680px) "
         + "   rotateX("+ calcX +"deg) "
         + "   rotateY("+ calcY +"deg) ";
 };

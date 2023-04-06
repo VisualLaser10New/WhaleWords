@@ -3,6 +3,7 @@ package com.vl10new.whalewords;
 import com.kennycason.kumo.palette.ColorPalette;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -51,6 +53,17 @@ public class WhaleWords extends HttpServlet {
 		return words;
 	}
 
+	public String getOutImg(SortedSet<Map.Entry<String, Long>> wordList) throws IOException
+	{
+		//generate the image whale
+		String maskPath = getClass().getResource("whale-mask.png").getPath();
+		BufferedImage maskImg = ImageIO.read(new File(maskPath));
+
+		ImageGen imgout = new ImageGen(wordList, new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
+		imgout.imageFromMask(maskPath, new Dimension(maskImg.getWidth(),maskImg.getHeight()));
+		return imgout.imageToB64();
+	}
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
 		String filePath = "";
@@ -72,26 +85,13 @@ public class WhaleWords extends HttpServlet {
 		}
 
 		ArrayList<String> stopWords = readFileFromResources("ita-stopWords.txt");
-		SortedSet<Map.Entry<String, Long>> output = occurences(filePath, stopWords);
-		output = limitTo(output, limitNo, ORDER.ASC);
+		SortedSet<Map.Entry<String, Long>> outputList = occurences(filePath, stopWords);
+		outputList = limitTo(outputList, limitNo, ORDER.ASC);
 
+		String image = getOutImg(outputList);
 
-		//generate the image whale
-		ImageGen img = new ImageGen(output, new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
-		img.imageFromMask(getClass().getResource("whale-mask.png").getPath(), new Dimension(680,680));
-		String image = img.imageToB64();
-
-		//print page
-		String body = "";
-		body += "<div id=\"ex1\" class=\"container\">\n" +
-				"   <div id=\"ex1-layer\" class=\"box\">" +
-				//"       <img src='data:image/png;base64,\""+image+"\"' alt='cloud words image'>" +
-				"       <img src='https://lh3.googleusercontent.com/a/AGNmyxbsIOLzZK3Poa9mhLkn3W1hPrd76bjqhGQm3ksXqg=s300-c' alt='cloud words image'>" +
-				"   </div>\n" +
-				"</div>";
-		body+= "<p>"+StoString(output)+"</p>";
-
-		genPage(body, response, request);
+		//call the jsp to generate the page
+		genPage(image, outputList, response, request);
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -99,63 +99,18 @@ public class WhaleWords extends HttpServlet {
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
 
-	public void genPage(String body, HttpServletResponse response, HttpServletRequest request) throws IOException
+	public void genPage(String image, SortedSet<Map.Entry<String, Long>> wordsList, HttpServletResponse response, HttpServletRequest request) throws IOException
 	{
-		//standardize the pages
-		PrintWriter out = response.getWriter();
-		out.println("<html>" +
-				"<head>" +
-				"<title>Whale Words</title>\n" +
-				"    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">\n" +
-				"    <link rel=\"stylesheet\" href=\""+ request.getContextPath()+"/style.css\">\n" +
-				"    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
-				"    <script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
-				"    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
-				//"    <script src=\""+request.getContextPath()+"/3d-rotate.js\"></script>" +
-					"<script id=\"rendered-js\">\n" +
-							"let constrain = 250;\n" +
-							"let mouseOverContainer = document.getElementById(\"ex1\");\n" +
-							"let ex1Layer = document.getElementById(\"ex1-layer\");\n" +
-							"\n" +
-							"function transforms(x, y, el) {\n" +
-							"  let box = el.getBoundingClientRect();\n" +
-							"  let calcX = -(y - box.y - box.height / 2) / constrain;\n" +
-							"  let calcY = (x - box.x - box.width / 2) / constrain;\n" +
-							"\n" +
-							"  return \"perspective(100px) \" +\n" +
-							"  \"   rotateX(\" + calcX + \"deg) \" +\n" +
-							"  \"   rotateY(\" + calcY + \"deg) \";\n" +
-							"};\n" +
-							"\n" +
-							"function transformElement(el, xyEl) {\n" +
-							"  el.style.transform = transforms.apply(null, xyEl);\n" +
-							"}\n" +
-							"\n" +
-							"mouseOverContainer.onmousemove = function (e) {\n" +
-							"  let xy = [e.clientX, e.clientY];\n" +
-							"  let position = xy.concat([ex1Layer]);\n" +
-							"\n" +
-							"  window.requestAnimationFrame(function () {\n" +
-							"    transformElement(ex1Layer, position);\n" +
-							"  });\n" +
-							"};\n" +
-						"</script>\n"+
-				"</head>" +
-				"<body>");
-
-		//define pages header here
-		out.println("<header></header>");
-
-
-		//print body page here
-		out.println(body);
-
-
-		//define pages footer here
-		out.println("<footer>" +
-				"<a  class='btn btn-primary' href='./index.jsp'>home</a><h2>Mitiche Produzioni SRL&#169;</h2><p>Produciamo cose mitiche<p>" +
-				"</footer>");
-		out.println("</body></html>");
+		try
+		{
+			request.setAttribute("cloud_image", "data:image/png;base64,"+image);
+			request.setAttribute("words_list", StoString(wordsList));
+			request.getRequestDispatcher("npl-imgview.jsp").forward(request, response);
+		}
+		catch (ServletException e)
+		{
+			response.sendRedirect(request.getContextPath() + "/error.jsp");
+		}
 	}
 
 	public void destroy() {
