@@ -1,8 +1,13 @@
 .list-group {
-  max-height: 600px;
+  max-height: 680px;
   margin-bottom: 10px;
   overflow: scroll;
   /*-webkit-overflow-scrolling: touch;*/
+}
+.scroll-div {
+  max-height: 550px;
+  overflow: scroll;
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 footer {

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:include page="index.jsp">
-    <jsp:param name="body_page" value="<div class='container mt-5'>
+    <jsp:param name="body_page" value="<div class='container-fluid align-top'>
     <div class='row d-flex justify-content-center'>
         <div class='col-md-8'>
             <h1 id='register'>NLP File Analysis</h1>
