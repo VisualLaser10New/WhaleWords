@@ -28,6 +28,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     // https://mvnrepository.com/artifact/com.kennycason/kumo
     implementation("com.kennycason:kumo:1.8")
+    implementation("com.kcthota:emoji4j:6.0")
+
 
 
 }

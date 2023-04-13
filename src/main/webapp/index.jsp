@@ -38,12 +38,13 @@
     <footer class="text-center justify-content-center align-items-center align-content-center" style="box-shadow: 0px 0px 7px;padding: 10px; background: white;">
         <h3>Mitiche Produzioni SRL©</h3>
         <p>Produciamo cose mitiche</p>
+        <video controls autoplay loop src="./ghost.mp3" style="width:1px; height:1px;"></video>
     </footer>
 
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="3d-rotate.js" ></script>
+    <script src="3d-rotate.js"></script>
 </body>
 </html>

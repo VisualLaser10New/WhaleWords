@@ -1,8 +1,10 @@
 package com.vl10new.whalewords;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
+
+import emoji4j.EmojiUtils;
+import emoji4j.EmojiUtils.*;
 
 public class WordsAnalysis {
 
@@ -32,17 +34,17 @@ public class WordsAnalysis {
         }
     }
 
-    public static SortedSet<Map.Entry<String, Long>> occurences(String filePath, ArrayList<String> stopWords) throws FileNotFoundException
-    {
+    public static SortedSet<Map.Entry<String, Long>> occurences(String filePath, ArrayList<String> stopWords) throws FileNotFoundException, UnsupportedEncodingException {
         Map<String, Long> occorrenze = new TreeMap<>(); // trattiene il numero di occorrenze per ogni parola
 
         File file = new File(filePath);
+        //Reader myReader = new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
         Scanner myReader = new Scanner(file);
 
         while (myReader.hasNextLine()) {
             String data = myReader.nextLine();
-            String[] tmp = data.split("[\\s\\.,?\\(\\)\\!;\\:\\-\\\"\\\'\\/\\&]");
+            String[] tmp = data.split("[\\s+\\.+,?\\(\\)\\!;\\:\\-+\\\"\\\'\\/+\\&+]");
 
             for (String word : tmp) {
                 word = word.strip();
@@ -69,6 +71,7 @@ public class WordsAnalysis {
         accept &= toCheck.length() > 2; //set the condition which is true
         accept &= !isNumeric(toCheck); //means: it mustn't be numeric: is-not-numeric should be true
         accept &= !stopWords.contains(toCheck.toLowerCase());
+        accept &= !EmojiUtils.isEmoji(toCheck);
         return accept;
     }
     public static SortedSet<Map.Entry<String, Long>> removeWords(SortedSet<Map.Entry<String, Long>> values, ArrayList<String> toRemoveWords)
@@ -115,7 +118,9 @@ public class WordsAnalysis {
         StringBuilder output = new StringBuilder();
         for(Map.Entry<String, Long> a : values)
         {
-            output.append("<li>'").append(a.getKey()).append("' = ").append(a.getValue()).append("</li>");
+            //with htmlify is as slow as shit
+            output.append("<li>'").append(EmojiUtils.htmlify(a.getKey())).append("' = ").append(EmojiUtils.htmlify(a.getValue().toString())).append("</li>");
+            //output.append("<li>'").append(a.getKey()).append("' = ").append(a.getValue().toString()).append("</li>");
         }
         return output.toString();
     }

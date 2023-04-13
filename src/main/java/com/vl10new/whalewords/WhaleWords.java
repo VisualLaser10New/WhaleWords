@@ -25,7 +25,7 @@ import static com.vl10new.whalewords.WordsAnalysis.*;
 )
 public class WhaleWords extends HttpServlet {
 
-	final String uploadDir = "D:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
+	final String uploadDir = "E:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
 
 	public String fileUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
