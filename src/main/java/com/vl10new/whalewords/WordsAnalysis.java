@@ -72,8 +72,14 @@ public class WordsAnalysis {
         accept &= !isNumeric(toCheck); //means: it mustn't be numeric: is-not-numeric should be true
         accept &= !stopWords.contains(toCheck.toLowerCase());
         accept &= !EmojiUtils.isEmoji(toCheck);
+        accept &= !containsSpecialCharacter(toCheck);
         return accept;
     }
+
+    private static boolean containsSpecialCharacter(String s) {
+        return (s == null) ? false : s.matches("[^A-Za-z0-9]");
+    }
+
     public static SortedSet<Map.Entry<String, Long>> removeWords(SortedSet<Map.Entry<String, Long>> values, ArrayList<String> toRemoveWords)
     {
         for (String word : toRemoveWords)
