@@ -1,6 +1,7 @@
 package com.vl10new.whalewords;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 import emoji4j.EmojiUtils;
@@ -34,6 +35,26 @@ public class WordsAnalysis {
         }
     }
 
+
+    public static ArrayList<String> pharsesWithWords(String filePath, ArrayList<String> words) throws FileNotFoundException
+    {
+        ArrayList<String> output = new ArrayList<>();
+        File file = new File(filePath);
+
+        Scanner myReader = new Scanner(file);
+
+        while (myReader.hasNextLine())
+        {
+            String data = myReader.nextLine();
+
+            if(arrInStr(data, words))
+            {
+                output.add(data);
+            }
+        }
+        myReader.close();
+        return output;
+    }
     public static SortedSet<Map.Entry<String, Long>> occurences(String filePath, ArrayList<String> stopWords) throws FileNotFoundException, UnsupportedEncodingException {
         Map<String, Long> occorrenze = new TreeMap<>(); // trattiene il numero di occorrenze per ogni parola
 
@@ -42,7 +63,8 @@ public class WordsAnalysis {
 
         Scanner myReader = new Scanner(file);
 
-        while (myReader.hasNextLine()) {
+        while (myReader.hasNextLine())
+        {
             String data = myReader.nextLine();
             String[] tmp = data.split("[\\s+\\.+,?\\(\\)\\!;\\:\\-+\\\"\\\'\\/+\\&+]");
 
@@ -63,6 +85,45 @@ public class WordsAnalysis {
         return values;
     }
 
+    public static boolean arrInStr(String text, ArrayList<String> arr)
+    {
+        //if the string countains an element of array
+        //or an element of array contains the string
+        for(String a : arr)
+        {
+            a=a.toLowerCase();
+            text = text.toLowerCase();
+            if(text.contains(a) || a.contains(text))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ArrayList<String> foundIn(String filePath, ArrayList<String> badWords) throws FileNotFoundException
+    {
+       ArrayList<String> output = new ArrayList<>();
+
+        File file = new File(filePath);
+        //Reader myReader = new InputStreamReader(new FileInputStream(file), "UTF-8"));
+
+        Scanner myReader = new Scanner(file);
+
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            if(acceptableWord(new ArrayList<>(), data))
+            {
+                if(arrInStr(data, badWords))
+                {
+                    output.add(data);
+                }
+            }
+        }
+        myReader.close();
+
+        return output;
+    }
     private static Boolean acceptableWord(ArrayList<String> stopWords, String toCheck)
     {
         Boolean accept = true;

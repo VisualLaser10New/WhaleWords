@@ -23,6 +23,7 @@
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link active" href="npl-upload.jsp">NPL Analysis</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="bad-sentence-upload.jsp">Bad Sentences</a></li>
                     </ul>
                 </div>
             </div>
