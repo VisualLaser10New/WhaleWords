@@ -4,7 +4,7 @@
     <jsp:param name="body_page" value="
     <div class='container-fluid'>
       <div class='row'>
-        <div class='col-md-6 col-lg-4 text-start'>
+        <div class='col-md col-lg text-start'>
           <ul class='list-unstyled list-group'>
               ${sentences_list}
           </ul>

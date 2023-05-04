@@ -1,29 +1,16 @@
 package com.vl10new.whalewords;
 
-import com.kennycason.kumo.palette.ColorPalette;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.SortedSet;
-
+import java.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import javax.servlet.annotation.*;
 import static com.vl10new.whalewords.WordsAnalysis.*;
 
 @WebServlet(name = "badwhale", value = "/badwhale")
 @MultipartConfig(
 		fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
-		maxFileSize = 1024 * 1024 * 10,      // 10 MB
+		maxFileSize = 1024 * 1024 * 100,      // 10 MB
 		maxRequestSize = 1024 * 1024 * 100   // 100 MB
 )
 public class BadWhale extends HttpServlet {
@@ -50,7 +37,7 @@ public class BadWhale extends HttpServlet {
 
 		ArrayList<String> badWords = Utilities.readFileFromResources("sheetWords.txt");
 
-		ArrayList<String> worstComment = WordsAnalysis.pharsesWithWords(filePath, badWords);
+		ArrayList<String> worstComment = WordsAnalysis.phrasesWithWords(filePath, badWords);
 
 		//call the jsp to generate the page
 		genPage(worstComment, response, request);
