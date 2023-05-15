@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Utilities {
-	final static String uploadDir = "D:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
+	final static String uploadDir = "E:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
 
 	public static String fileUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{

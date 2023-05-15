@@ -22,7 +22,6 @@ public class BadWhale extends HttpServlet {
 		try
 		{
 			filePath = Utilities.fileUpload(request, response);
-
 		}
 		catch(ServletException e)
 		{
@@ -54,7 +53,11 @@ public class BadWhale extends HttpServlet {
 	{
 		try
 		{
-			request.setAttribute("sentences_list", StoString(wordsList));
+			if(wordsList.size() > 0)
+				request.setAttribute("sentences_list", StoString(wordsList));
+			else
+				request.setAttribute("sentences_list", "No matches");
+
 			request.getRequestDispatcher("badwhale-viewer.jsp").forward(request, response);
 		}
 		catch (ServletException e)
