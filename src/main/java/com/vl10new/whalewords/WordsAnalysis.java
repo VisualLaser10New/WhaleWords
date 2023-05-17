@@ -2,6 +2,7 @@ package com.vl10new.whalewords;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import emoji4j.EmojiUtils;
 
@@ -33,6 +34,15 @@ public class WordsAnalysis {
 		}
 	}
 
+	public static String htmlSpecialEncode(String str)
+	{
+		str.replace("<", "&lt;");
+		str.replace(">", "&gt;");
+		str.replace("'", "&#39;");
+		str.replace("\"", "&quot;");
+		str.replace("&", "&amp;");
+		return str;
+	}
 
 	public static ArrayList<String> phrasesWithWords(String filePath, ArrayList<String> words) throws FileNotFoundException, IOException
 	{
@@ -94,7 +104,7 @@ public class WordsAnalysis {
 		{
 			a=a.toLowerCase();
 			text = text.toLowerCase();
-			if(text.contains(a))//|| a.contains(text))
+			if(Pattern.compile("(?:^|[^a-zA-Z])"+a+"(?:[^a-zA-Z]|$)").matcher(text).matches())//|| a.contains(text))
 			{
 				var output = new HashMap<String, Boolean>();
 				output.put(a, true);
@@ -177,7 +187,7 @@ public class WordsAnalysis {
 		StringBuilder output = new StringBuilder();
 		for(T o : values)
 		{
-			output.append("<li>'").append(o).append("'</li>");
+			output.append("<li>'").append(htmlSpecialEncode(EmojiUtils.htmlify((String) o))).append("'</li>");
 		}
 		return output.toString();
 	}
