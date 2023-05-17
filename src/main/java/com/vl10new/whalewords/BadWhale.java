@@ -40,8 +40,6 @@ public class BadWhale extends HttpServlet {
 
 		//call the jsp to generate the page
 		genPage(worstComment, response, request);
-
-
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException

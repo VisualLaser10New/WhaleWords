@@ -34,21 +34,24 @@ public class WordsAnalysis {
 	}
 
 
-	public static ArrayList<String> phrasesWithWords(String filePath, ArrayList<String> words) throws FileNotFoundException
+	public static ArrayList<String> phrasesWithWords(String filePath, ArrayList<String> words) throws FileNotFoundException, IOException
 	{
 		ArrayList<String> output = new ArrayList<>();
-		File file = new File(filePath);
+		FileReader file = new FileReader(filePath);
 
-		Scanner myReader = new Scanner(file);
+		BufferedReader myReader = new BufferedReader(file);
+		int i = 0;
 
-		while (myReader.hasNextLine())
+		String data = myReader.readLine();
+		while (data != null)
 		{
-			String data = myReader.nextLine();
+			i++;
 			var val  = arrInStr(data, words);
 			if(val.containsValue(true))
 			{
 				output.add(data + val.keySet());
 			}
+			data = myReader.readLine();
 		}
 		myReader.close();
 		return output;
@@ -91,7 +94,7 @@ public class WordsAnalysis {
 		{
 			a=a.toLowerCase();
 			text = text.toLowerCase();
-			if(text.contains(" "+a+" "))//|| a.contains(text))
+			if(text.contains(a))//|| a.contains(text))
 			{
 				var output = new HashMap<String, Boolean>();
 				output.put(a, true);
@@ -174,7 +177,7 @@ public class WordsAnalysis {
 		StringBuilder output = new StringBuilder();
 		for(T o : values)
 		{
-			output.append(o).append("<br>");
+			output.append("<li>'").append(o).append("'</li>");
 		}
 		return output.toString();
 	}

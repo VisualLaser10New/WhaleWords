@@ -5,7 +5,7 @@
     <div class='container-fluid'>
       <div class='row'>
         <div class='col-md col-lg text-start'>
-          <ul class='list-unstyled list-group'>
+          <ul class='list-group'>
               ${sentences_list}
           </ul>
         </div>
