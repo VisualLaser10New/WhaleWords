@@ -4,10 +4,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.swing.text.html.HTMLDocument;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Utilities {
 	final static String uploadDir = "E:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
