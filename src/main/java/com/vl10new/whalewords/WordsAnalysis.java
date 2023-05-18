@@ -36,11 +36,11 @@ public class WordsAnalysis {
 
 	public static String htmlSpecialEncode(String str)
 	{
-		str.replace("<", "&lt;");
-		str.replace(">", "&gt;");
-		str.replace("'", "&#39;");
-		str.replace("\"", "&quot;");
-		str.replace("&", "&amp;");
+		str = str.replace("&", "&amp;").
+				replace("<", "&lt;").
+				replace(">", "&gt;").
+				replace("'", "&#39;").
+				replace("\"", "&quot;");
 		return str;
 	}
 
@@ -53,13 +53,20 @@ public class WordsAnalysis {
 		int i = 0;
 
 		String data = myReader.readLine();
+		String regex = arrInStrRegexComposer(words);
 		while (data != null)
 		{
 			i++;
+			/*
 			var val  = arrInStr(data, words);
 			if(val.containsValue(true))
 			{
 				output.add(data + val.keySet());
+			}*/
+			//System.out.println(regex);
+			if(regexMatch(regex, data))
+			{
+				output.add(data);
 			}
 			data = myReader.readLine();
 		}
@@ -104,7 +111,11 @@ public class WordsAnalysis {
 		{
 			a=a.toLowerCase();
 			text = text.toLowerCase();
-			if(Pattern.compile("(?:^|[^a-zA-Z])"+a+"(?:[^a-zA-Z]|$)").matcher(text).matches())//|| a.contains(text))
+			StringBuilder regex = new StringBuilder();
+			regex.append("(?:^|[^a-zA-Z])").append(a).append("(?:[^a-zA-Z]|$)");
+			Pattern pattern = Pattern.compile(regex.toString());
+
+			if(pattern.matcher(text).results().findAny().isPresent())//|| a.contains(text))
 			{
 				var output = new HashMap<String, Boolean>();
 				output.put(a, true);
@@ -112,6 +123,30 @@ public class WordsAnalysis {
 			}
 		}
 		return new HashMap<>();
+	}
+
+	public static Boolean regexMatch(String regex, String text)
+	{
+		Pattern pattern = Pattern.compile(regex);
+		if(pattern.matcher(text).results().findAny().isPresent())
+		{
+			return true;
+		}
+		return false;
+	}
+	public static String arrInStrRegexComposer(ArrayList<String> arr)
+	{
+		StringBuilder regex = new StringBuilder();
+		regex.append("(?:^|[^a-zA-Z])(");
+		for(String a : arr)
+		{
+			a=a.toLowerCase();
+			//regex.append("(").append(a).append(")|");
+			regex.append(a).append("|");
+		}
+		regex.deleteCharAt(regex.length()-1);
+		regex.append(")(?:[^a-zA-Z]|$)");
+		return regex.toString();
 	}
 
 	private static Boolean acceptableWord(ArrayList<String> stopWords, String toCheck)
@@ -187,7 +222,7 @@ public class WordsAnalysis {
 		StringBuilder output = new StringBuilder();
 		for(T o : values)
 		{
-			output.append("<li>'").append(htmlSpecialEncode(EmojiUtils.htmlify((String) o))).append("'</li>");
+			output.append("<li>'").append(htmlSpecialEncode(EmojiUtils.htmlify(o.toString()))).append("'</li>");
 		}
 		return output.toString();
 	}
