@@ -38,6 +38,74 @@ public class Utilities {
 		return words;
 	}
 
+	public static Iterable<String> readTextYield(String filePath) throws IOException
+	{
+		FileReader file = new FileReader(filePath);
+		BufferedReader myReader = new BufferedReader(file);
+		final String[] data = {myReader.readLine()};
 
+		return new Iterable<String>()
+		{
+
+			@Override
+			public Iterator<String> iterator()
+			{
+				return new Iterator<String>()
+				{
+
+					@Override
+					public boolean hasNext() {
+						// TODO code to check next
+						try {
+							data[0] = myReader.readLine();
+							return (data[0] != null);
+						}
+						catch(Exception e)
+						{
+							try {
+								myReader.close();
+							} catch (IOException ex) {
+								return false;
+							}
+							return false;
+						}
+					}
+
+					@Override
+					public String next() {
+						// TODO code to go to next
+						return data[0];
+					}
+
+					@Override
+					public void remove() {
+						try {
+							myReader.close();
+						} catch (IOException e) {
+
+						}
+						// TODO code to remove item or throw exception
+					}
+
+				};
+			}
+		};
+
+	}
+
+	/*public static Iterable<String> readTextYield(String filePath) throws IOException
+	{
+		FileReader file = new FileReader(filePath);
+
+		BufferedReader myReader = new BufferedReader(file);
+
+		String data = myReader.readLine();
+
+		while (data != null)
+		{
+			yieldReturn(myReader.readLine());
+		}
+		myReader.close();
+	}*/
 
 }

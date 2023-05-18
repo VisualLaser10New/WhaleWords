@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 
 import emoji4j.EmojiUtils;
 
-public class WordsAnalysis {
+
+public class WordsAnalysis extends WordsUtilities {
 
 	public enum ORDER
 	{
@@ -25,38 +26,17 @@ public class WordsAnalysis {
 		return sortedEntries;
 	}
 
-	private static boolean isNumeric(String str) {
-		try {
-			Double.parseDouble(str);
-			return true;
-		} catch(NumberFormatException e){
-			return false;
-		}
-	}
-
-	public static String htmlSpecialEncode(String str)
-	{
-		str = str.replace("&", "&amp;").
-				replace("<", "&lt;").
-				replace(">", "&gt;").
-				replace("'", "&#39;").
-				replace("\"", "&quot;");
-		return str;
-	}
-
 	public static ArrayList<String> phrasesWithWords(String filePath, ArrayList<String> words) throws FileNotFoundException, IOException
 	{
 		ArrayList<String> output = new ArrayList<>();
 		FileReader file = new FileReader(filePath);
 
 		BufferedReader myReader = new BufferedReader(file);
-		int i = 0;
 
 		String data = myReader.readLine();
 		String regex = arrInStrRegexComposer(words);
 		while (data != null)
 		{
-			i++;
 			/*
 			var val  = arrInStr(data, words);
 			if(val.containsValue(true))
@@ -103,83 +83,6 @@ public class WordsAnalysis {
 		return values;
 	}
 
-	public static Map<String, Boolean> arrInStr(String text, ArrayList<String> arr)
-	{
-		//if the string contains an element of array
-		//or an element of array contains the string
-		for(String a : arr)
-		{
-			a=a.toLowerCase();
-			text = text.toLowerCase();
-			StringBuilder regex = new StringBuilder();
-			regex.append("(?:^|[^a-zA-Z])").append(a).append("(?:[^a-zA-Z]|$)");
-			Pattern pattern = Pattern.compile(regex.toString());
-
-			if(pattern.matcher(text).results().findAny().isPresent())//|| a.contains(text))
-			{
-				var output = new HashMap<String, Boolean>();
-				output.put(a, true);
-				return output;
-			}
-		}
-		return new HashMap<>();
-	}
-
-	public static Boolean regexMatch(String regex, String text)
-	{
-		Pattern pattern = Pattern.compile(regex);
-		if(pattern.matcher(text).results().findAny().isPresent())
-		{
-			return true;
-		}
-		return false;
-	}
-	public static String arrInStrRegexComposer(ArrayList<String> arr)
-	{
-		StringBuilder regex = new StringBuilder();
-		regex.append("(?:^|[^a-zA-Z])(");
-		for(String a : arr)
-		{
-			a=a.toLowerCase();
-			//regex.append("(").append(a).append(")|");
-			regex.append(a).append("|");
-		}
-		regex.deleteCharAt(regex.length()-1);
-		regex.append(")(?:[^a-zA-Z]|$)");
-		return regex.toString();
-	}
-
-	private static Boolean acceptableWord(ArrayList<String> stopWords, String toCheck)
-	{
-		Boolean accept = true;
-		//ampersand is to avoid the forgetting of previous checks
-
-		accept &= toCheck.length() > 2; //set the condition which is true
-		accept &= !isNumeric(toCheck); //means: it mustn't be numeric: is-not-numeric should be true
-		accept &= !stopWords.contains(toCheck.toLowerCase());
-		//accept &= !EmojiUtils.isEmoji(toCheck);
-		accept &= !containsSpecialCharacter(toCheck);
-		return accept;
-	}
-
-	private static boolean containsSpecialCharacter(String s) {
-		return (s == null) ? false : s.matches("[^A-Za-z0-9]");
-	}
-
-	public static SortedSet<Map.Entry<String, Long>> removeWords(SortedSet<Map.Entry<String, Long>> values, ArrayList<String> toRemoveWords)
-	{
-		for (String word : toRemoveWords)
-		{
-			for(Map.Entry<String, Long> v : values){
-				if(v.getKey().equals(word)){
-					values.remove(v);
-				}
-			}
-		}
-
-		return values;
-	}
-
 	public static SortedSet<Map.Entry<String, Long>> limitTo(SortedSet<Map.Entry<String, Long>> list, int limit, ORDER oreder)
 	{
 		//extract last [int limit] values
@@ -201,6 +104,16 @@ public class WordsAnalysis {
 				return output;
 
 			output.add(it.next());
+		}
+		return output;
+	}
+
+	public static ArrayList<String> polarizeText(String textFile, Map<String, Integer> weightWords ) throws IOException {
+		ArrayList<String> output = new ArrayList<>();
+		for(String line : Utilities.readTextYield(textFile))
+		{
+			int val = WordsUtilities.stringWeight(line, weightWords);
+			output.add(line + " " + String.valueOf(val));
 		}
 		return output;
 	}
