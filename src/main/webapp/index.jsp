@@ -24,6 +24,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link active" href="npl-upload.jsp">NPL Analysis</a></li>
                         <li class="nav-item"><a class="nav-link active" href="bad-sentence-upload.jsp">Bad Sentences</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="sentiment-upload.jsp">Sentiment Analysis</a></li>
                     </ul>
                 </div>
             </div>

@@ -3,10 +3,7 @@ package com.vl10new.whalewords;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedSet;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -112,17 +109,18 @@ public class WordsUtilities {
 		var sent = sentimentAnalysis(text, weightedWords);
 		AtomicInteger sum = new AtomicInteger();
 		sent.forEach((a) -> sum.addAndGet(a.getValue()));
+		//sent.forEach((a) -> System.out.println(a.getKey().toString() + a.getValue().toString()));
 		return sum.get();
 	}
 
-	public static ArrayList<Pair<String, Integer>> sentimentAnalysis(String text, Map<String, Integer> weightedWords)
+	public static List<Pair<String, Integer>> sentimentAnalysis(String text, Map<String, Integer> weightedWords)
 	{
-		ArrayList<Pair<String,Integer>> output = new ArrayList<>();
+		List<Pair<String,Integer>> output = new ArrayList<>();
 		String[] tmp = text.split("[\\s+\\.+,?\\(\\)\\!;\\:\\-+\\\"\\\'\\/+\\&+]");
 		for (String tempS : tmp)
 		{
 			tempS = tempS.toLowerCase();
-			int val = weightedWords.containsKey(tempS) ? weightedWords.get(tempS) : 0;
+			int val = weightedWords.getOrDefault(tempS, 0);
 			output.add(new MutablePair<>(tempS,val));
 		}
 		return output;
@@ -130,7 +128,7 @@ public class WordsUtilities {
 
 	public static Map<String, Integer> fromArrayListoToHashMap(ArrayList<String> array, String sepChar)
 	{
-		HashMap<String, Integer> returnValue = null;
+		HashMap<String, Integer> returnValue = new HashMap<>();
 		for (String element : array)
 		{
 			String[] elementSplitted = element.split(sepChar);

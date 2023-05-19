@@ -20,7 +20,7 @@ import static com.vl10new.whalewords.WordsAnalysis.*;
 @WebServlet(name = "sentwhale", value = "/sentwhale")
 @MultipartConfig(
 		fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
-		maxFileSize = 1024 * 1024 * 10,      // 10 MB
+		maxFileSize = 1024 * 1024 * 100,      // 10 MB
 		maxRequestSize = 1024 * 1024 * 100   // 100 MB
 )
 public class SentimentWhale extends HttpServlet

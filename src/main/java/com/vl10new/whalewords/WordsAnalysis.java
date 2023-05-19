@@ -96,7 +96,7 @@ public class WordsAnalysis extends WordsUtilities {
 		Iterator<Map.Entry<String, Long>> it = oreder == ORDER.DESC ? list.iterator() : new TreeSet<>(list).descendingIterator();
 
 		//prevent number bigger than list len
-		limit = limit > list.size() ? list.size() : limit;
+		limit = Math.min(limit, list.size());
 
 		//iterate list
 		for (int i = 0; i < limit; i++) {
@@ -135,7 +135,7 @@ public class WordsAnalysis extends WordsUtilities {
 		StringBuilder output = new StringBuilder();
 		for(T o : values)
 		{
-			output.append("<li>'").append(htmlSpecialEncode(EmojiUtils.htmlify(o.toString()))).append("'</li>");
+			output.append("<li>'").append(EmojiUtils.htmlify(htmlSpecialEncode(o.toString()))).append("'</li>");
 		}
 		return output.toString();
 	}

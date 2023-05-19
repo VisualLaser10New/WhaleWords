@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Utilities {
-	final static String uploadDir = "E:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
+	final static String uploadDir = "D:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
 
 	public static String fileUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -44,53 +44,45 @@ public class Utilities {
 	{
 		FileReader file = new FileReader(filePath);
 		BufferedReader myReader = new BufferedReader(file);
-		final String[] data = {myReader.readLine()};
+		String[] data = {myReader.readLine()};
 
-		return new Iterable<String>()
+		return () -> new Iterator<String>()
 		{
 
 			@Override
-			public Iterator<String> iterator()
-			{
-				return new Iterator<String>()
+			public boolean hasNext() {
+				// TODO code to check next
+				try {
+					data[0] = myReader.readLine();
+					return (data[0] != null);
+				}
+				catch(Exception e)
 				{
-
-					@Override
-					public boolean hasNext() {
-						// TODO code to check next
-						try {
-							data[0] = myReader.readLine();
-							return (data[0] != null);
-						}
-						catch(Exception e)
-						{
-							try {
-								myReader.close();
-							} catch (IOException ex) {
-								return false;
-							}
-							return false;
-						}
+					try {
+						myReader.close();
+					} catch (IOException ex) {
+						return false;
 					}
-
-					@Override
-					public String next() {
-						// TODO code to go to next
-						return data[0];
-					}
-
-					@Override
-					public void remove() {
-						try {
-							myReader.close();
-						} catch (IOException e) {
-
-						}
-						// TODO code to remove item or throw exception
-					}
-
-				};
+					return false;
+				}
 			}
+
+			@Override
+			public String next() {
+				// TODO code to go to next
+				return data[0];
+			}
+
+			@Override
+			public void remove() {
+				try {
+					myReader.close();
+				} catch (IOException e) {
+
+				}
+				// TODO code to remove item or throw exception
+			}
+
 		};
 
 	}
