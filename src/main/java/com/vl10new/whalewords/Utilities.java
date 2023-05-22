@@ -12,12 +12,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Utilities {
-	final static String uploadDir = "D:/5Cin/TPS/Java";//getServletContext().getInitParameter("uploadDirectory");
+	final static String uploadDir = "C:\\hp\\HPQWare\\browser";//getServletContext().getInitParameter("uploadDirectory");
 
 	public static String fileUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+
 		Part filePart = request.getPart("uploadedFile");
 		String fileName = filePart.getSubmittedFileName();
+
+		File file = new File(uploadDir+"/tmp/"+fileName);
+		file.delete();
 
 		filePart.write(uploadDir + "/tmp/" + fileName);
 
@@ -86,20 +90,4 @@ public class Utilities {
 		};
 
 	}
-
-	/*public static Iterable<String> readTextYield(String filePath) throws IOException
-	{
-		FileReader file = new FileReader(filePath);
-
-		BufferedReader myReader = new BufferedReader(file);
-
-		String data = myReader.readLine();
-
-		while (data != null)
-		{
-			yieldReturn(myReader.readLine());
-		}
-		myReader.close();
-	}*/
-
 }

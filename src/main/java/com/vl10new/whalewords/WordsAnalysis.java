@@ -29,41 +29,29 @@ public class WordsAnalysis extends WordsUtilities {
 	public static ArrayList<String> phrasesWithWords(String filePath, ArrayList<String> words) throws FileNotFoundException, IOException
 	{
 		ArrayList<String> output = new ArrayList<>();
-		FileReader file = new FileReader(filePath);
 
-		BufferedReader myReader = new BufferedReader(file);
-
-		String data = myReader.readLine();
 		String regex = arrInStrRegexComposer(words);
-		while (data != null)
+		for(String data : Utilities.readTextYield(filePath))
 		{
-			/*
+
 			var val  = arrInStr(data, words);
 			if(val.containsValue(true))
 			{
 				output.add(data + val.keySet());
-			}*/
+			}
 			//System.out.println(regex);
-			if(regexMatch(regex, data))
+			/*if(regexMatch(regex, data))
 			{
 				output.add(data);
-			}
-			data = myReader.readLine();
+			}*/
 		}
-		myReader.close();
 		return output;
 	}
-	public static SortedSet<Map.Entry<String, Long>> occurences(String filePath, ArrayList<String> stopWords) throws FileNotFoundException, UnsupportedEncodingException {
+	public static SortedSet<Map.Entry<String, Long>> occurences(String filePath, ArrayList<String> stopWords) throws IOException {
 		Map<String, Long> occorrenze = new TreeMap<>(); // trattiene il numero di occorrenze per ogni parola
 
-		File file = new File(filePath);
-		//Reader myReader = new InputStreamReader(new FileInputStream(file), "UTF-8"));
-
-		Scanner myReader = new Scanner(file);
-
-		while (myReader.hasNextLine())
+		for(String data : Utilities.readTextYield(filePath))
 		{
-			String data = myReader.nextLine();
 			String[] tmp = data.split("[\\s+\\.+,?\\(\\)\\!;\\:\\-+\\\"\\\'\\/+\\&+]");
 
 			for (String word : tmp) {
@@ -77,7 +65,6 @@ public class WordsAnalysis extends WordsUtilities {
 				}
 			}
 		}
-		myReader.close();
 
 		SortedSet<Map.Entry<String, Long>> values = entriesSortedByValues(occorrenze);
 		return values;
@@ -124,7 +111,8 @@ public class WordsAnalysis extends WordsUtilities {
 		for(Map.Entry<String, Long> a : values)
 		{
 			//with htmlify is as slow as shit
-			output.append("<li>'").append(EmojiUtils.htmlify(a.getKey())).append("' = ").append(EmojiUtils.htmlify(a.getValue().toString())).append("</li>");
+			output.append("<li>'").append(a.getKey()).append("' = ").append(a.getValue().toString()).append("</li>");
+			//output.append("<li>'").append(EmojiUtils.htmlify(a.getKey())).append("' = ").append(EmojiUtils.htmlify(a.getValue().toString())).append("</li>");
 			//output.append("<li>'").append(a.getKey()).append("' = ").append(a.getValue().toString()).append("</li>");
 		}
 		return output.toString();
@@ -135,7 +123,8 @@ public class WordsAnalysis extends WordsUtilities {
 		StringBuilder output = new StringBuilder();
 		for(T o : values)
 		{
-			output.append("<li>'").append(EmojiUtils.htmlify(htmlSpecialEncode(o.toString()))).append("'</li>");
+			output.append("<li>'").append(htmlSpecialEncode(o.toString())).append("'</li>");
+			//output.append("<li>'").append(EmojiUtils.htmlify(htmlSpecialEncode(o.toString()))).append("'</li>");
 		}
 		return output.toString();
 	}
