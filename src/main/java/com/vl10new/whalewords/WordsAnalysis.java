@@ -33,17 +33,16 @@ public class WordsAnalysis extends WordsUtilities {
 		String regex = arrInStrRegexComposer(words);
 		for(String data : Utilities.readTextYield(filePath))
 		{
-
-			var val  = arrInStr(data, words);
+			/*var val  = arrInStr(data, words);
 			if(val.containsValue(true))
 			{
 				output.add(data + val.keySet());
-			}
-			//System.out.println(regex);
-			/*if(regexMatch(regex, data))
+			}*/
+
+			if(regexMatch(regex, data))
 			{
 				output.add(data);
-			}*/
+			}
 		}
 		return output;
 	}

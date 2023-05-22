@@ -5,9 +5,9 @@
     <div class='container-fluid'>
       <div class='row'>
         <div class='col-md col-lg text-start'>
-          <ul>
+          <ol>
               ${sentences_list}
-          </ul>
+          </ol>
         </div>
       </div>
     </div>"

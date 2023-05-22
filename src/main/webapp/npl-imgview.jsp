@@ -6,7 +6,7 @@
       <div class='row'>
         <div class='col-md-6 col-lg-8 offset-lg-0 text-center'>
         <div class='dcontainer'>
-          <img class='rounded' alt='whale-words' src='${cloud_image}'>
+          <img class='rounded' id='ex1-layer' alt='whale-words' src='${cloud_image}'>
           </div>
         </div>
         <div class='col-md-6 col-lg-4 text-start'>
@@ -15,6 +15,7 @@
           </ul>
         </div>
       </div>
-    </div>"
+    </div>
+    <script src='3d-rotate.js'></script>"
   />
 </jsp:include>
